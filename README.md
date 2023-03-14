@@ -23,4 +23,4 @@ JavaScript desde los fundamentos hasta temas más avanzados como Prototypes, Del
 18. Sitio web para una Agencia de Viajes (Desarrollado con NodeJS y Sequelize)
 19. FullStack JavaScript con React, Express, MongoDB, Node.
 
-## JavaScript es el lenguaje más popular para web hoy en día, y puede utilizarse en el cliente o Servidor, en este curso aprenderás todo lo necesario y es una excelente introducción si quieres aprender librerías nuevas como VueJS, React, Angular o NodeJS
+#### JavaScript es el lenguaje más popular para web hoy en día, y puede utilizarse en el cliente o Servidor, en este curso aprenderás todo lo necesario y es una excelente introducción si quieres aprender librerías nuevas como VueJS, React, Angular o NodeJS
