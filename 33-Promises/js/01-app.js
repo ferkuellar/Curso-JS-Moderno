@@ -18,3 +18,7 @@ function mostrarPaises() {
 mostrarPaises();
 
 nuevoPais('Alemania', mostrarPaises);
+// se acaba el programa
+
+
+mostrarPaises();
