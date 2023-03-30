@@ -101,6 +101,9 @@ function iniciarApp() {
     };
 
     function mostarRecetaModal(receta){
+
+        console.log(receta)
+
         const { idMeal, strInstructions, strMeal, strMealThumb} = receta;
         // añadir contenido a modal
         const modalTitle = document.querySelector('.modal .modal-title');
@@ -111,10 +114,30 @@ function iniciarApp() {
             <img class = "img-fluid" src="${strMealThumb}" alt="receta ${strMeal}"/>
             <h3 class="my-3">Instrucciones</h3>
             <p>${strInstructions}</p>
+            <h3 class="my-3">Ingredientes y Cantidades</h3>
         `;
+
+
+        const listGroup = document.createElement('UL');
+        listGroup.classList.add('list-group');
+        // Mostar cantidades
+        for(let i = 1; i <= 20 ; i++) {
+            if(receta[`strIngredient${i}`]){
+                const ingrediente = receta [`strIngredient${i}`];
+                const cantidad = receta [`strMeasure${i}`];
+
+                const ingredienteLi = document.createElement('LI');
+                ingredienteLi.classList.add('list-group-item');
+                ingredienteLi.textContent = `${ingrediente} - ${cantidad}`;
+
+                listGroup.appendChild(ingredienteLi);
+            };
+        };
+
+        modalBody.appendChild(listGroup);
         // Muestra modal
         modal.show();
-    }
+    };
 
     function limpiarHTML(selector){
         while(selector.firstChild){
