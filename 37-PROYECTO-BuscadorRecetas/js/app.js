@@ -4,6 +4,7 @@ function iniciarApp() {
     selectCategorias.addEventListener('change', seleccionarCategoria);
 
     const resultado = document.querySelector('#resultado');
+    const modal = new bootstrap.Modal('#modal', {});
 
     obtenerCategorias();
 
@@ -57,15 +58,15 @@ function iniciarApp() {
 
             const recetaImagen = document.createElement('IMG');
             recetaImagen.classList.add('card-img-top');
-            recetaImagen.alt = `Imagen de la receta ${strMeal}`;
-            recetaImagen.src = strMealThumb;
+            recetaImagen.alt = `Imagen de la receta ${strMeal ?? receta.titulo}`;
+            recetaImagen.src = strMealThumb ?? receta.img;
 
             const recetaCardBody = document.createElement('DIV');
             recetaCardBody.classList.add('card-body');
 
             const recetaHeading = document.createElement('H3');
             recetaHeading.classList.add('card-title', 'mb-3');
-            recetaHeading.textContent = strMeal;
+            recetaHeading.textContent = strMeal ?? receta.titulo;
 
             const recetaButton = document.createElement('BUTTON');
             recetaButton.classList.add('btn', 'btn-danger', 'w-100');
@@ -73,7 +74,7 @@ function iniciarApp() {
             // recetaButton.dataset.bsTarget = "#modal";
             // recetaButton.dataset.bsToogle = "modal";
             recetaButton.onclick = function(){
-                selcccionarReceta(idMeal)
+                selcccionarReceta(idMeal ?? receta.id)
             };
 
             // Inyectar en el codigo HTML
@@ -100,7 +101,19 @@ function iniciarApp() {
     };
 
     function mostarRecetaModal(receta){
-        
+        const { idMeal, strInstructions, strMeal, strMealThumb} = receta;
+        // añadir contenido a modal
+        const modalTitle = document.querySelector('.modal .modal-title');
+        const modalBody = document.querySelector('.modal .modal-body');
+
+        modalTitle.textContent = strMeal;
+        modalBody.innerHTML = `
+            <img class = "img-fluid" src="${strMealThumb}" alt="receta ${strMeal}"/>
+            <h3 class="my-3">Instrucciones</h3>
+            <p>${strInstructions}</p>
+        `;
+        // Muestra modal
+        modal.show();
     }
 
     function limpiarHTML(selector){
