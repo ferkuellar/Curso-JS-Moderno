@@ -140,14 +140,16 @@ function iniciarApp() {
         // Botones de cerrar y favorito
         const btnFavorito = document.createElement('BUTTON');
         btnFavorito.classList.add('btn', 'btn-danger', 'col');
-        btnFavorito.textContent = 'Guardar Favorito';
+        btnFavorito.textContent = existeStorage(idMeal) ? 'Eliminar Favorito' : 'Guardar Favorito';
 
         // Localstorege
 
         btnFavorito.onclick = function() {
-
             if(existeStorage(idMeal)) {
-                return
+                eliminarFavorito(idMeal);
+                btnFavorito.textContent = 'Guardar favorito';
+                mostrarToast('Elimiando Correctamente');
+                return;
             };
 
             agregarFavorito({
@@ -155,6 +157,8 @@ function iniciarApp() {
                 titulo: strMeal,
                 img: strMealThumb
             });
+            btnFavorito.textContent = 'Eliminar favorito';
+            mostrarToast('Agregado Correctamente');
         };
         
         const btnCerrarModal = document.createElement('BUTTON');
@@ -176,11 +180,26 @@ function iniciarApp() {
         localStorage.setItem('favoritos', JSON.stringify([...favoritos, receta]));
     };
 
+    function eliminarFavorito(id){
+        const favoritos = JSON.parse(localStorage.getItem('favoritos')) ?? [];
+        const nuevosFavoritos = favoritos.filter(favorito => favorito.id !== id);
+        localStorage.setItem('favoritos', JSON.stringify(nuevosFavoritos));
+    }
+
     // existe storage
 
     function existeStorage(id){
         const favoritos = JSON.parse(localStorage.getItem('favoritos')) ?? [];
         return favoritos.some(favoritos => favoritos.id === id);
+    };
+
+    function mostrarToast(mensaje){
+        const toastDiv = document.querySelector('#toast');
+        const toastBody = document.querySelector('.toast-body');
+        const toast = new bootstrap.Toast(toastDiv);
+
+        toastBody.textContent = mensaje;
+        toast.show();
     };
 
     function limpiarHTML(selector){
