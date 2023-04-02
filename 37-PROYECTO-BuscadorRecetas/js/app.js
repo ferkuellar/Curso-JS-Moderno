@@ -1,12 +1,20 @@
 function iniciarApp() {
 
     const selectCategorias = document.querySelector('#categorias');
-    selectCategorias.addEventListener('change', seleccionarCategoria);
+    if(selectCategorias){
+        selectCategorias.addEventListener('change', seleccionarCategoria);
+        obtenerCategorias();
+    };
+
+    const favoritosDiv = document.querySelector('.favoritos');
+    if(favoritosDiv) {
+        obtenerFavoritos();
+    }
 
     const resultado = document.querySelector('#resultado');
     const modal = new bootstrap.Modal('#modal', {});
 
-    obtenerCategorias();
+    
 
     function obtenerCategorias(){
         const url = 'https://www.themealdb.com/api/json/v1/1/categories.php';
@@ -200,6 +208,19 @@ function iniciarApp() {
 
         toastBody.textContent = mensaje;
         toast.show();
+    };
+
+    function obtenerFavoritos() {
+        const favoritos = JSON.parse(localStorage.getItem('favoritos')) ?? [];
+        console.log(favoritos);
+        if(favoritos.length) {
+            mostrarRecetas(favoritos);
+            return
+        }
+        const nofavoritos = document.createElement('P');
+        nofavoritos.textContent = 'No hay Favoritos aún';
+        nofavoritos.classList.add('fs-4', 'text-center', 'font-bold', 'mt-5');
+        favoritosDiv.appendChild(nofavoritos)
     };
 
     function limpiarHTML(selector){
