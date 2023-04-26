@@ -5,6 +5,7 @@ const paginacionDiv = document.querySelector('#paginacion');
 const registrosPorPagina = 40;
 let totalPaginas;
 let iterador;
+let paginaActual = 1;
 
 window.onload = () => {
     formulario.addEventListener('submit', validarFormulario);
@@ -21,7 +22,7 @@ function validarFormulario(e){
         return;
     };
 
-    buscarImagenes(terminoBusqueda);
+    buscarImagenes();
 };
 
 function mostrarAlerta(mensaje){
@@ -47,9 +48,12 @@ function mostrarAlerta(mensaje){
     
 };
 
-function buscarImagenes(termino){
+function buscarImagenes(){
+
+    const termino = document.querySelector('#termino').value;
+
     const key = '35704188-a651f7e7dbf8bbaa9a4f3e9db';
-    const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=${registrosPorPagina}`;
+    const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=${registrosPorPagina}&page=${paginaActual}`;
 
     fetch(url)
         .then(respuesta => respuesta.json())
@@ -95,8 +99,7 @@ function mostrarImagenes(imagenes){
                         <p>${views} <span class="font-light"> Veces vista </span> </p>
 
                         <a 
-                            class="block w-full bg-blue-800 hover:bg-blue-500 text-white uppercase font-bold text-center rounded mt-5 p-1"    
-
+                            class="block w-full bg-blue-800 hover:bg-blue-500 text-white uppercase font-bold text-center rounded mt-5 p-1"   
                             href="${largeImageURL}" target="_balnk" rel="noopener noreferrer"
                         >
                             Ver Imagen
@@ -129,14 +132,20 @@ function imprimirPaginador() {
         const{value, done} = iterador.next();
         if(done) return;
 
-    // Caso contrario, genera un boton por cada elemento en el generador 
+        // Caso contrario, genera un boton por cada elemento en el generador 
 
-    const boton = document.createElement('a');
-    boton.href = '#';
-    boton.dataset.pagina = value;
-    boton.textContent= value;
-    boton.classList.add('siguente', 'bg-yellow-400', 'px-4', 'py-1', 'mr-2', 'font-bold', 'mb-4', 'uppercase', 'rounded');
+        const boton = document.createElement('a');
+        boton.href = '#';
+        boton.dataset.pagina = value;
+        boton.textContent= value;
+        boton.classList.add('siguente', 'bg-yellow-400', 'px-4', 'py-1', 'mr-2', 'font-bold', 'mb-4', 'rounded');
 
-    paginacionDiv.appendChild(boton);
+        boton.onclick = () => {
+            paginaActual = value;
+
+            buscarImagenes();
+        }
+
+        paginacionDiv.appendChild(boton);
     };
 };
