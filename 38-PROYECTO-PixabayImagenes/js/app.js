@@ -1,5 +1,6 @@
 const resultado = document.querySelector('#resultado');
 const formulario = document.querySelector('#formulario');
+const paginacionDiv = document.querySelector('#paginacion');
 
 const registrosPorPagina = 40;
 let totalPaginas;
@@ -48,7 +49,7 @@ function mostrarAlerta(mensaje){
 
 function buscarImagenes(termino){
     const key = '35704188-a651f7e7dbf8bbaa9a4f3e9db';
-    const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=100`;
+    const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=${registrosPorPagina}`;
 
     fetch(url)
         .then(respuesta => respuesta.json())
@@ -61,6 +62,7 @@ function buscarImagenes(termino){
 // Generador que va aregistrar la cantidad de elementos de acuerdo a las paginas
 
 function *crearPaginador(total) {
+    console.log(total);
     for (let i = 1; i <= total; i++){
         yield i;
     };
@@ -71,7 +73,7 @@ function calcularPaginas(total) {
 };
 
 function mostrarImagenes(imagenes){
-    console.log(imagenes);
+    // console.log(imagenes);
 
     while(resultado.firstChild){
         resultado.removeChild(resultado.firstChild);
@@ -106,10 +108,35 @@ function mostrarImagenes(imagenes){
 
     });
 
+    // Limpiar el paginador previo
+    while(paginacionDiv.firstChild){
+        paginacionDiv.removeChild(paginacionDiv.firstChild)
+    };
+
+    // Generamos el nuevo HTML
+
     imprimirPaginador();
 
 };
 
 function imprimirPaginador() {
     iterador = crearPaginador(totalPaginas);
-}
+
+    // console.log(iterador.next().value); //Value nos trae el valor registrado con el yield
+    // console.log(iterador.next().done); //Done nos dice si ya recorrimos todo el iterador
+
+    while (true) {
+        const{value, done} = iterador.next();
+        if(done) return;
+
+    // Caso contrario, genera un boton por cada elemento en el generador 
+
+    const boton = document.createElement('a');
+    boton.href = '#';
+    boton.dataset.pagina = value;
+    boton.textContent= value;
+    boton.classList.add('siguente', 'bg-yellow-400', 'px-4', 'py-1', 'mr-2', 'font-bold', 'mb-4', 'uppercase', 'rounded');
+
+    paginacionDiv.appendChild(boton);
+    };
+};
