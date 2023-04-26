@@ -46,5 +46,9 @@ function buscarImagens(termino){
     const key = '35704188-a651f7e7dbf8bbaa9a4f3e9db';
     const url = `https://pixabay.com/api/?key=${key}&q=${termino}`;
 
-    console.log(url)
+    fetch(url)
+        .then(respuesta => respuesta.json())
+        .then(resultado=>{
+            console.log(resultado);
+        })
 }
