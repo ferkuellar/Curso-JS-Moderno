@@ -1,6 +1,9 @@
 const resultado = document.querySelector('#resultado');
 const formulario = document.querySelector('#formulario');
 
+const registrosPorPagina = 40;
+let totalPaginas;
+
 window.onload = () => {
     formulario.addEventListener('submit', validarFormulario);
 };
@@ -16,7 +19,7 @@ function validarFormulario(e){
         return;
     };
 
-    buscarImagens(terminoBusqueda);
+    buscarImagenes(terminoBusqueda);
 };
 
 function mostrarAlerta(mensaje){
@@ -42,15 +45,20 @@ function mostrarAlerta(mensaje){
     
 };
 
-function buscarImagens(termino){
+function buscarImagenes(termino){
     const key = '35704188-a651f7e7dbf8bbaa9a4f3e9db';
     const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=100`;
 
     fetch(url)
         .then(respuesta => respuesta.json())
         .then(resultado=>{
+            totalPaginas = calcularPaginas(resultado.totalHits);
             mostrarImagenes(resultado.hits);
         });
+};
+
+function calcularPaginas(total) {
+    return parseInt(Math.ceil( total / registrosPorPagina ));
 };
 
 function mostrarImagenes(imagenes){
@@ -89,4 +97,4 @@ function mostrarImagenes(imagenes){
 
     })
 
-}
+};
